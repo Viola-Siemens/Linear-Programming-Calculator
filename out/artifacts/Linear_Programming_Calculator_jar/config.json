@@ -1,0 +1,51 @@
+{
+	"compositions": [
+		{
+			"name": "´Öµ°°×"
+		},
+		{
+			"name": "´ÖÏËÎ¬"
+		},
+		{
+			"name": "ÄÆ"
+		}
+	],
+	"materials": [
+		{
+			"name": "ÓñÃ×",
+			"price": 2.85,
+			"compositions": [
+				{
+					"id": "´Öµ°°×",
+					"amount": 7.85
+				},
+				{
+					"id": "´ÖÏËÎ¬",
+					"amount": 1.6
+				},
+				{
+					"id": "ÄÆ",
+					"amount": 0.02
+				}
+			]
+		},
+		{
+			"name": "Ãæ·Û",
+			"price": 3.35,
+			"compositions": [
+				{
+					"id": "´Öµ°°×",
+					"amount": 15.5
+				},
+				{
+					"id": "´ÖÏËÎ¬",
+					"amount": 1.4
+				},
+				{
+					"id": "ÄÆ",
+					"amount": 0.12
+				}
+			]
+		}
+	]
+}
