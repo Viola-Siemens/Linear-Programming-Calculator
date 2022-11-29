@@ -24,3 +24,7 @@ hs_err_pid*
 
 #config
 config.json
+
+#build
+out/
+target/

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ConfigHelper {
-	public record Composition(String name) implements ISerializable {
+	public record Composition(String name) implements ISerializable, IHasName {
 		@Override @Nonnull
 		public JsonObject toJson() {
 			JsonObject ret = new JsonObject();
@@ -25,7 +25,7 @@ public class ConfigHelper {
 			return new Composition(json.get("name").getAsString());
 		}
 	}
-	public record Material(String name, double price, Map<Composition, Double> compositions) implements ISerializable {
+	public record Material(String name, double price, Map<Composition, Double> compositions) implements ISerializable, IHasName {
 		@Override @Nonnull
 		public JsonObject toJson() {
 			JsonObject ret = new JsonObject();
@@ -91,6 +91,40 @@ public class ConfigHelper {
 	private final List<Composition> compositions = Lists.newArrayList();
 	private final List<Material> materials = Lists.newArrayList();
 
+	public int getCompositionCount() {
+		return this.compositions.size();
+	}
+	public int getMaterialCount() {
+		return this.materials.size();
+	}
+
+	public List<Composition> getCompositions() {
+		return this.compositions;
+	}
+	public List<Material> getMaterials() {
+		return this.materials;
+	}
+
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+	public static boolean verifyRegistry(List<? extends IHasName> registry, String name) {
+		for(IHasName entry: registry) {
+			if(entry.name().equals(name)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static void verifyRegistry(List<? extends IHasName> registry) {
+		for(IHasName entry: registry) {
+			for(IHasName entry2: registry) {
+				if(entry != entry2 && entry.equals(entry2)) {
+					Main.error("重复的注册名：%s".formatted(entry.name()));
+				}
+			}
+		}
+	}
+
 	public ConfigHelper() {
 		if(!this.configFile.isFile()) {
 			this.createConfigFile();
@@ -143,12 +177,29 @@ public class ConfigHelper {
 	private void createConfigFile() {
 		try {
 			if(!this.configFile.createNewFile()) {
-				Main.error("Config file already exists!");
+				Main.error("配置文件已存在！");
 				return;
 			}
 			Writer writer = new FileWriter(this.configFile);
 
 			writeJsonToFile(writer, null, new Sample().getJson(this.compositions, this.materials), 0);
+
+			writer.close();
+		} catch (IOException exception) {
+			Main.error(exception.getMessage());
+		}
+	}
+
+	public void commit() {
+		try {
+			if(!this.configFile.exists()) {
+				Main.error("配置文件丢失！");
+				return;
+			}
+
+			Writer writer = new FileWriter(this.configFile);
+
+			writeJsonToFile(writer, null, getJson(this.compositions, this.materials), 0);
 
 			writer.close();
 		} catch (IOException exception) {
@@ -168,5 +219,24 @@ public class ConfigHelper {
 		} catch (IOException | IllegalStateException | JsonSyntaxException exception) {
 			Main.error(exception.getMessage());
 		}
+
+		verifyRegistry(this.compositions);
+		verifyRegistry(this.materials);
+	}
+
+	private static JsonObject getJson(List<Composition> compositions, List<Material> materials) {
+		JsonArray aComposition = new JsonArray();
+		for(Composition composition: compositions) {
+			aComposition.add(composition.toJson());
+		}
+		JsonArray aMaterial = new JsonArray();
+		for(Material material: materials) {
+			aMaterial.add(material.toJson());
+		}
+		JsonObject ret = new JsonObject();
+		ret.add("compositions", aComposition);
+		ret.add("materials", aMaterial);
+
+		return ret;
 	}
 }

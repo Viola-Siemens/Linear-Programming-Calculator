@@ -3,8 +3,6 @@ package com.hexagram2021.lpcalc;
 import Jama.Matrix;
 import Jama.QRDecomposition;
 
-import java.util.Arrays;
-
 public class Solver {
 	private final Matrix A;
 	private final Matrix B;
