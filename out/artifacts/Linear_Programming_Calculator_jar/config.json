@@ -16,16 +16,16 @@
 			"price": 2.85,
 			"compositions": [
 				{
-					"id": "´Öµ°°×",
-					"amount": 7.85
+					"id": "ÄÆ",
+					"amount": 0.02
 				},
 				{
 					"id": "´ÖÏËÎ¬",
 					"amount": 1.6
 				},
 				{
-					"id": "ÄÆ",
-					"amount": 0.02
+					"id": "´Öµ°°×",
+					"amount": 7.85
 				}
 			]
 		},
@@ -34,18 +34,40 @@
 			"price": 3.35,
 			"compositions": [
 				{
-					"id": "´Öµ°°×",
-					"amount": 15.5
+					"id": "ÄÆ",
+					"amount": 0.12
 				},
 				{
 					"id": "´ÖÏËÎ¬",
 					"amount": 1.4
 				},
 				{
-					"id": "ÄÆ",
-					"amount": 0.12
+					"id": "´Öµ°°×",
+					"amount": 15.5
 				}
 			]
+		}
+	],
+	"constraints": [
+		{
+			"id": "´Öµ°°×",
+			"constraint": 10.0,
+			"type": "GREATER_THAN"
+		},
+		{
+			"id": "´ÖÏËÎ¬",
+			"constraint": 12.0,
+			"type": "GREATER_THAN"
+		},
+		{
+			"id": "ÄÆ",
+			"constraint": 0.2,
+			"type": "GREATER_THAN"
+		},
+		{
+			"id": "ÄÆ",
+			"constraint": 2.0,
+			"type": "LESS_THAN"
 		}
 	]
 }

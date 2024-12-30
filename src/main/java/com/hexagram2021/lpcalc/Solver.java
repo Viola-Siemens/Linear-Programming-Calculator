@@ -30,14 +30,14 @@ public class Solver {
 		for(int i = 0; i < this.n; ++i) {
 			if(this.isBase[i]) {
 				if(flag) {
-					System.out.printf(", %d", i + 1);
+					this.builder.append(", %d".formatted(i + 1));
 				} else {
-					System.out.printf("| (%d", i + 1);
+					this.builder.append("| (%d".formatted(i + 1));
 					flag = true;
 				}
 			}
 		}
-		System.out.print(") | ");
+		this.builder.append(") | ");
 
 		for(int i = 0; i < this.m; ++i) {
 			int cnt = 0;
@@ -54,7 +54,7 @@ public class Solver {
 		QRDecomposition comp = mtx.qr();
 
 		if(!comp.isFullRank()) {
-			System.out.print("No solution | - |\n");
+			this.builder.append("No solution | - |\n");
 			return;
 		}
 
@@ -69,17 +69,17 @@ public class Solver {
 		for(int i = 0; i < this.n; ++i) {
 			if(this.isBase[i]) {
 				if(flag) {
-					System.out.print(", 0");
+					this.builder.append(", 0");
 				} else {
-					System.out.print("(0");
+					this.builder.append("(0");
 					flag = true;
 				}
 				cnt += 1;
 			} else {
 				if(flag) {
-					System.out.printf(", %f", x.get(i - cnt, 0));
+					this.builder.append(", %f".formatted(x.get(i - cnt, 0)));
 				} else {
-					System.out.printf("(%f", x.get(i - cnt, 0));
+					this.builder.append("(%f".formatted(x.get(i - cnt, 0)));
 					flag = true;
 				}
 				if(x.get(i - cnt, 0) < 0) {
@@ -90,12 +90,21 @@ public class Solver {
 			}
 		}
 		if(failed) {
-			System.out.print(") | - |\n");
+			this.builder.append(") | - |\n");
 		} else {
-			System.out.printf(") | %f |\n", ans);
+			this.builder.append(") | %f |\n".formatted(ans));
 			if(ans < this.best) {
 				this.best = ans;
-				this.best_x = x;
+				this.best_x = new Matrix(this.n, 1);
+
+				cnt = 0;
+				for(int i = 0; i < this.n; ++i) {
+					if(this.isBase[i]) {
+						cnt += 1;
+					} else {
+						this.best_x.set(i, 0, x.get(i - cnt, 0));
+					}
+				}
 			}
 		}
 	}
@@ -116,13 +125,21 @@ public class Solver {
 		}
 	}
 
+	StringBuilder builder;
+
 	public void solve() {
-		System.out.print("| 基变量 | 解 | 结果 |\n|---|---|---|\n");
+		this.builder = new StringBuilder();
+		this.builder.append("\n| 基变量 | 解 | 结果 |\n|---|---|---|\n");
 		this.solve(0, 0);
-		System.out.printf("\n全局最优解：%f\n", this.best);
+		this.builder.append("\n全局最优解：%f\n".formatted(this.best));
+		Main.log(this.builder.toString());
 	}
 
 	public double[] getAnswer() {
 		return this.best_x.getColumnPackedCopy();
+	}
+
+	public double getBest() {
+		return this.best;
 	}
 }
