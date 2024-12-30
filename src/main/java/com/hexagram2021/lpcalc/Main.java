@@ -5,6 +5,8 @@ import com.hexagram2021.lpcalc.utils.ConfigHelper;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -313,6 +315,22 @@ public class Main {
 							JTextField textField = new JTextField();
 							textField.setText(String.valueOf(material.compositions().get(composition).doubleValue()));
 							textField.addActionListener(e -> material.compositions().replace(composition, Double.parseDouble(textField.getText())));
+							textField.getDocument().addDocumentListener(new DocumentListener() {
+								@Override
+								public void insertUpdate(DocumentEvent e) {
+									material.compositions().replace(composition, Double.parseDouble(textField.getText()));
+								}
+
+								@Override
+								public void removeUpdate(DocumentEvent e) {
+									material.compositions().replace(composition, Double.parseDouble(textField.getText()));
+								}
+
+								@Override
+								public void changedUpdate(DocumentEvent e) {
+									material.compositions().replace(composition, Double.parseDouble(textField.getText()));
+								}
+							});
 							jComponent = textField;
 
 							JPopupMenu popupMenu = new JPopupMenu();
@@ -460,6 +478,22 @@ public class Main {
 				textField.setSize(CELL_WIDTH, CELL_HEIGHT - CELL_MARGIN_HEIGHT);
 				textField.setText(String.valueOf(material.price()));
 				textField.addActionListener(e -> changePrice(helper, material, Double.parseDouble(textField.getText())));
+				textField.getDocument().addDocumentListener(new DocumentListener() {
+					@Override
+					public void insertUpdate(DocumentEvent e) {
+						changePrice(helper, material, Double.parseDouble(textField.getText()));
+					}
+
+					@Override
+					public void removeUpdate(DocumentEvent e) {
+						changePrice(helper, material, Double.parseDouble(textField.getText()));
+					}
+
+					@Override
+					public void changedUpdate(DocumentEvent e) {
+						changePrice(helper, material, Double.parseDouble(textField.getText()));
+					}
+				});
 				panel.add(textField);
 			}
 			col += 1;
@@ -605,6 +639,22 @@ public class Main {
 				textField.setFont(font);
 				textField.setSize(CELL_WIDTH, CELL_HEIGHT - CELL_MARGIN_HEIGHT);
 				textField.addActionListener(e -> changeConstraint(helper, constraint, Double.parseDouble(textField.getText())));
+				textField.getDocument().addDocumentListener(new DocumentListener() {
+					@Override
+					public void insertUpdate(DocumentEvent e) {
+						changeConstraint(helper, constraint, Double.parseDouble(textField.getText()));
+					}
+
+					@Override
+					public void removeUpdate(DocumentEvent e) {
+						changeConstraint(helper, constraint, Double.parseDouble(textField.getText()));
+					}
+
+					@Override
+					public void changedUpdate(DocumentEvent e) {
+						changeConstraint(helper, constraint, Double.parseDouble(textField.getText()));
+					}
+				});
 				panel.add(textField);
 			}
 			row += 1;
